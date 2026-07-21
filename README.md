@@ -1,5 +1,9 @@
 # YUNZII B75 PRO MAX — OpenRGB firmware (QMK)
 
+![YUNZII B75 PRO MAX running a music-reactive OpenRGB effect](docs/demo.gif)
+
+*Per-key RGB control via OpenRGB Direct mode — here driving a live music visualizer.*
+
 Custom **QMK firmware for the YUNZII B75 PRO MAX** that enables the **OpenRGB protocol**, so the keyboard is detected and controllable in [OpenRGB](https://openrgb.org/) — including **Direct mode** for per-key control (music visualizers, ambient/screen lighting, game integrations, etc.).
 
 The **stock YUNZII firmware ships with VIA but not OpenRGB**, so OpenRGB fails to detect the board with:
