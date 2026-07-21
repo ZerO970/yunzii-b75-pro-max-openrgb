@@ -1,0 +1,13 @@
+﻿diff --git a/quantum/rgb_matrix/animations/rgb_matrix_effects.inc b/quantum/rgb_matrix/animations/rgb_matrix_effects.inc
+index a02238a2d1..a702941d92 100644
+--- a/quantum/rgb_matrix/animations/rgb_matrix_effects.inc
++++ b/quantum/rgb_matrix/animations/rgb_matrix_effects.inc
+@@ -42,4 +42,5 @@
+ #include "starlight_anim.h"
+ #include "starlight_dual_sat_anim.h"
+ #include "starlight_dual_hue_anim.h"
+-#include "riverflow_anim.h"
+\ No newline at end of file
++#include "riverflow_anim.h"
++#include "openrgb_direct_anim.h"
+\ No newline at end of file

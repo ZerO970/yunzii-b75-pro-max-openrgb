@@ -1,0 +1,20 @@
+﻿diff --git a/builddefs/common_features.mk b/builddefs/common_features.mk
+index 7227a5558e..b919beb344 100644
+--- a/builddefs/common_features.mk
++++ b/builddefs/common_features.mk
+@@ -620,6 +620,15 @@ ifeq ($(strip $(VIA_ENABLE)), yes)
+     TRI_LAYER_ENABLE := yes
+ endif
+ 
++ifeq ($(strip $(OPENRGB_ENABLE)), yes)
++    ifeq ($(strip $(VIA_ENABLE)), yes)
++        $(error OPENRGB_ENABLE and VIA_ENABLE cannot currently be enabled simultaneously)
++    endif
++    RAW_ENABLE := yes
++    SRC += $(QUANTUM_DIR)/openrgb.c
++    OPT_DEFS += -DOPENRGB_ENABLE
++endif
++
+ VALID_CUSTOM_MATRIX_TYPES:= yes lite no
+ 
+ CUSTOM_MATRIX ?= no
