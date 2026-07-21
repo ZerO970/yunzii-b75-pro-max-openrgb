@@ -99,6 +99,22 @@ The stm32duino bootloader is untouched. If anything goes wrong, re-enter the boo
 
 ---
 
+## FAQ
+
+**Does it work with SignalRGB?**
+Not directly. SignalRGB doesn't speak the OpenRGB protocol and has no native plugin for the B75 PRO MAX. You *can* route SignalRGB's effects to the keyboard through the [SignalRGB → OpenRGB bridge](https://github.com/Fefedu973/SignalRGB-To-OpenRGB-Bridge), which exposes OpenRGB devices to SignalRGB. Important: **don't run OpenRGB and SignalRGB at the same time** — they both try to own the keyboard's raw-HID channel and will fight each other, which shows up as flicker/glitches. This firmware is OpenRGB-native, so OpenRGB is the smoothest path.
+
+**Does OpenRGB control work over Bluetooth / 2.4 GHz?**
+No — OpenRGB is USB-only here. Use the USB-C cable for lighting control (typing still works wirelessly).
+
+**Can I still use VIA or the vendor configurator?**
+Not on this firmware — OpenRGB and VIA can't coexist. Flash the stock firmware back if you need VIA or the screen/BLE module OTA updater.
+
+**Will this brick my keyboard?**
+Very unlikely. The stm32duino bootloader is untouched — hold `ESC` while plugging in USB to enter it, then flash the stock `.bin` to revert.
+
+---
+
 ## Credits
 
 - [OpenRGB](https://openrgb.org/) by Adam Honse (CalcProgrammer1).
