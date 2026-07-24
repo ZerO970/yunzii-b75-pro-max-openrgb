@@ -59,9 +59,9 @@ KC_LSFT,KC_NUBS, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    
 	),
 	[1] = LAYOUT(
 		_______, KC_BRID, KC_BRIU, G(KC_TAB),KC_MYCM,KC_MAIL, KC_WHOM, KC_MPRV, KC_MPLY, KC_MNXT, KC_MUTE, KC_VOLD, KC_VOLU,          _______,
-		_______, KC_BLE1, KC_BLE2, KC_BLE3, KC_24G,  _______, _______, _______, Scr_Home,Scr_Pic, Scr_Gif, _______, _______, RGB_TOG, Scr_EN,
-        KC_WHITE,_______, _______, _______, _______, _______, _______, _______, _______, _______, _______,  _______,  _______, RGB_MOD, Scr_Time,
-		_______, _______, KC_MAC,  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, RGB_HUI, _______,
+		_______, KC_BLE1, KC_BLE2, KC_BLE3, KC_24G,  SCR_HK1, SCR_HK2, SCR_HK3, Scr_Home,Scr_Pic, Scr_Gif, _______, _______, RGB_TOG, Scr_EN,
+        KC_WHITE,_______, _______, _______, _______, _______, _______, _______, _______, _______, _______,  _______,  RGB_RMOD, RGB_MOD, Scr_Time,
+		_______, _______, KC_MAC,  _______, _______, _______, _______, _______, _______, _______, RGB_SAD, RGB_SAI, RGB_HUD, RGB_HUI, _______,
 _______,_______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, RGB_VAI,          _______,
 		_______, WIN_LOCK,_______,                            KC_RESET,                  _______, _______, KC_BAT,  RGB_SPD, RGB_VAD, RGB_SPI
 	),
@@ -75,9 +75,9 @@ KC_LSFT,KC_NUBS, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    
 	),
 	[3] = LAYOUT(
 		_______, KC_BRID, KC_BRIU, KC_MCTL, KC_LPAD, _______, _______, KC_MPRV, KC_MPLY, KC_MNXT, KC_MUTE, KC_VOLD, KC_VOLU,          _______,
-		_______, KC_BLE1, KC_BLE2, KC_BLE3, KC_24G,  _______, _______, _______, Scr_Home,Scr_Pic, Scr_Gif, _______, _______, RGB_TOG, Scr_EN,
-        KC_WHITE,_______, _______, _______, _______, _______, _______, _______, _______, _______, _______,  _______,  _______, RGB_MOD, Scr_Time,
-		_______, KC_WIN,  _______,  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, RGB_HUI, _______,
+		_______, KC_BLE1, KC_BLE2, KC_BLE3, KC_24G,  SCR_HK1, SCR_HK2, SCR_HK3, Scr_Home,Scr_Pic, Scr_Gif, _______, _______, RGB_TOG, Scr_EN,
+        KC_WHITE,_______, _______, _______, _______, _______, _______, _______, _______, _______, _______,  _______,  RGB_RMOD, RGB_MOD, Scr_Time,
+		_______, KC_WIN,  _______,  _______, _______, _______, _______, _______, _______, _______, RGB_SAD, RGB_SAI, RGB_HUD, RGB_HUI, _______,
 _______,_______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, RGB_VAI,          _______,
 		_______, _______, _______,                            KC_RESET,                  _______, _______, KC_BAT,  RGB_SPD, RGB_VAD, RGB_SPI
 	)

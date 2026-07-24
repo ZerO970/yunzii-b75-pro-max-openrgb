@@ -40,133 +40,19 @@
 #endif
 
 RGB                  g_openrgb_direct_mode_colors[RGB_MATRIX_LED_COUNT] = {[0 ... RGB_MATRIX_LED_COUNT - 1] = {OPENRGB_DIRECT_MODE_STARTUP_GREEN, OPENRGB_DIRECT_MODE_STARTUP_RED, OPENRGB_DIRECT_MODE_STARTUP_BLUE}};
-static const uint8_t openrgb_rgb_matrix_effects_indexes[]           = {
-    1,  2,
-
-#ifndef DISABLE_RGB_MATRIX_ALPHAS_MODS
-    3,
-#endif
-#ifndef DISABLE_RGB_MATRIX_GRADIENT_UP_DOWN
-    4,
-#endif
-#ifndef DISABLE_RGB_MATRIX_GRADIENT_LEFT_RIGHT
-    5,
-#endif
-#ifndef DISABLE_RGB_MATRIX_BREATHING
-    6,
-#endif
-#ifndef DISABLE_RGB_MATRIX_BAND_SAT
-    7,
-#endif
-#ifndef DISABLE_RGB_MATRIX_BAND_VAL
-    8,
-#endif
-#ifndef DISABLE_RGB_MATRIX_BAND_PINWHEEL_SAT
-    9,
-#endif
-#ifndef DISABLE_RGB_MATRIX_BAND_PINWHEEL_VAL
-    10,
-#endif
-#ifndef DISABLE_RGB_MATRIX_BAND_SPIRAL_SAT
-    11,
-#endif
-#ifndef DISABLE_RGB_MATRIX_BAND_SPIRAL_VAL
-    12,
-#endif
-#ifndef DISABLE_RGB_MATRIX_CYCLE_ALL
-    13,
-#endif
-#ifndef DISABLE_RGB_MATRIX_CYCLE_LEFT_RIGHT
-    14,
-#endif
-#ifndef DISABLE_RGB_MATRIX_CYCLE_UP_DOWN
-    15,
-#endif
-#ifndef DISABLE_RGB_MATRIX_CYCLE_OUT_IN
-    16,
-#endif
-#ifndef DISABLE_RGB_MATRIX_CYCLE_OUT_IN_DUAL
-    17,
-#endif
-#ifndef DISABLE_RGB_MATRIX_RAINBOW_MOVING_CHEVRON
-    18,
-#endif
-#ifndef DISABLE_RGB_MATRIX_CYCLE_PINWHEEL
-    19,
-#endif
-#ifndef DISABLE_RGB_MATRIX_CYCLE_SPIRAL
-    20,
-#endif
-#ifndef DISABLE_RGB_MATRIX_DUAL_BEACON
-    21,
-#endif
-#ifndef DISABLE_RGB_MATRIX_RAINBOW_BEACON
-    22,
-#endif
-#ifndef DISABLE_RGB_MATRIX_RAINBOW_PINWHEELS
-    23,
-#endif
-#ifndef DISABLE_RGB_MATRIX_RAINDROPS
-    24,
-#endif
-#ifndef DISABLE_RGB_MATRIX_JELLYBEAN_RAINDROPS
-    25,
-#endif
-#ifndef DISABLE_RGB_MATRIX_HUE_BREATHING
-    26,
-#endif
-#ifndef DISABLE_RGB_MATRIX_HUE_PENDULUM
-    27,
-#endif
-#ifndef DISABLE_RGB_MATRIX_HUE_WAVE
-    28,
-#endif
-#if defined(RGB_MATRIX_FRAMEBUFFER_EFFECTS) && !defined(DISABLE_RGB_MATRIX_TYPING_HEATMAP)
-    29,
-#endif
-#if defined(RGB_MATRIX_FRAMEBUFFER_EFFECTS) && !defined(DISABLE_RGB_MATRIX_DIGITAL_RAIN)
-    30,
-#endif
-#if defined RGB_MATRIX_KEYREACTIVE_ENABLED && !defined DISABLE_RGB_MATRIX_SOLID_REACTIVE_SIMPLE
-    31,
-#endif
-#if defined RGB_MATRIX_KEYREACTIVE_ENABLED && !defined DISABLE_RGB_MATRIX_SOLID_REACTIVE
-    32,
-#endif
-#if defined RGB_MATRIX_KEYREACTIVE_ENABLED && !defined DISABLE_RGB_MATRIX_SOLID_REACTIVE_WIDE
-    33,
-#endif
-#if defined RGB_MATRIX_KEYREACTIVE_ENABLED && !defined DISABLE_RGB_MATRIX_SOLID_REACTIVE_MULTIWIDE
-    34,
-#endif
-#if defined RGB_MATRIX_KEYREACTIVE_ENABLED && !defined DISABLE_RGB_MATRIX_SOLID_REACTIVE_CROSS
-    35,
-#endif
-#if defined RGB_MATRIX_KEYREACTIVE_ENABLED && !defined DISABLE_RGB_MATRIX_SOLID_REACTIVE_MULTICROSS
-    36,
-#endif
-#if defined RGB_MATRIX_KEYREACTIVE_ENABLED && !defined DISABLE_RGB_MATRIX_SOLID_REACTIVE_NEXUS
-    37,
-#endif
-#if defined RGB_MATRIX_KEYREACTIVE_ENABLED && !defined DISABLE_RGB_MATRIX_SOLID_REACTIVE_MULTINEXUS
-    38,
-#endif
-#if defined RGB_MATRIX_KEYREACTIVE_ENABLED && !defined DISABLE_RGB_MATRIX_SPLASH
-    39,
-#endif
-#if defined RGB_MATRIX_KEYREACTIVE_ENABLED && !defined DISABLE_RGB_MATRIX_MULTISPLASH
-    40,
-#endif
-#if defined RGB_MATRIX_KEYREACTIVE_ENABLED && !defined DISABLE_RGB_MATRIX_SOLID_SPLASH
-    41,
-#endif
-#if defined RGB_MATRIX_KEYREACTIVE_ENABLED && !defined DISABLE_RGB_MATRIX_SOLID_MULTISPLASH
-    42,
-#endif
-};
+// NOTE: the old openrgb_rgb_matrix_effects_indexes[] table was removed.
+// openrgb_get_enabled_modes() now enumerates compiled effects dynamically
+// (1..RGB_MATRIX_EFFECT_MAX-1), so no static effect-index table is needed.
 static uint8_t raw_hid_buffer[RAW_EPSIZE];
 
+extern bool via_command_kb(uint8_t *data, uint8_t length);
+
 void raw_hid_receive(uint8_t *data, uint8_t length) {
+    if (*data >= 0x0a) {
+        via_command_kb(data, length);
+        return;
+    }
+
     switch (*data) {
         case OPENRGB_GET_PROTOCOL_VERSION:
             openrgb_get_protocol_version();
@@ -302,9 +188,15 @@ void openrgb_get_led_info(uint8_t *data) {
 }
 void openrgb_get_enabled_modes(void) {
     raw_hid_buffer[0] = OPENRGB_GET_ENABLED_MODES;
-    const uint8_t size = sizeof openrgb_rgb_matrix_effects_indexes / sizeof openrgb_rgb_matrix_effects_indexes[0];
-    for (int i = 0; i < size; i++) {
-        raw_hid_buffer[i + 1] = openrgb_rgb_matrix_effects_indexes[i];
+    // Report the actual compiled effects. Every rgb_matrix mode from 1 up to
+    // RGB_MATRIX_EFFECT_MAX-1 is a real, selectable effect in this build, so we
+    // enumerate them dynamically instead of using a hard-coded table that
+    // assumed a specific (canonical) effect set and drifted out of sync with
+    // this fork's renamed/extra effects. This keeps the OpenRGB mode list
+    // exactly in sync with what the firmware can actually play.
+    uint8_t idx = 1;
+    for (uint8_t mode = 1; mode < RGB_MATRIX_EFFECT_MAX && idx < RAW_EPSIZE; mode++) {
+        raw_hid_buffer[idx++] = mode;
     }
 }
 
