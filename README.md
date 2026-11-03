@@ -89,9 +89,28 @@ A single tap makes a small step; **holding** a colour/brightness/speed key sweep
 
 ## Using it with OpenRGB
 
+**One-time setup — add the board manually.** The B75 PRO MAX isn't in OpenRGB's built-in QMK list, so OpenRGB won't look for it until you add it:
+
+1. Use a recent OpenRGB (tested on **1.0rc3**).
+2. **Settings → Manually Added Devices** (older builds: **Settings → QMK**) → **Add Device… → QMK OpenRGB Device**.
+3. Name: anything · **USB VID `0x28E9`** · **USB PID `0x31C8`** → **Save and Rescan**.
+4. Check the **Devices** tab — the keyboard shows up with 85 LEDs.
+
 - Use the **USB-C cable**. OpenRGB talks over USB raw HID; it does **not** work over Bluetooth / 2.4G.
 - The board **auto-switches into Direct mode** as soon as OpenRGB streams color data — so music visualizers / ambient tools "just work" without manually selecting a mode.
 - For an audio visualizer or screen ambilight, the [OpenRGB Effects Plugin](https://openrgb.org/plugin_effects.html) (Audio Visualizer / Ambilight effects) or [KeyboardVisualizer](https://gitlab.com/CalcProgrammer1/KeyboardVisualizer) work well.
+
+### OpenRGB doesn't see the keyboard?
+
+Check the OpenRGB log first (`%APPDATA%\OpenRGB\logs`, newest file) and look for a `[QMK OpenRGB]` line — it tells you which case you're in:
+
+| What the log says | Cause | Fix |
+|---|---|---|
+| **No `[QMK OpenRGB]` line at all** | OpenRGB never started scanning, or doesn't know to look for the board | 1) **Look for a hidden admin (UAC) prompt** — OpenRGB may be sitting behind a "Do you want to allow…" window that never came to the front (check the taskbar). It does nothing until you click **Yes**. 2) Make sure the manual device above is added and **Save and Rescan** was pressed. 3) **Settings → Supported Devices**: "QMK OpenRGB Protocol" and your manual entry are ticked. 4) Keyboard is on the **USB cable in wired mode** — over 2.4G/Bluetooth it has a different VID/PID. |
+| `Detection failed - the detected keyboard does not have the OpenRGB protocol feature enabled` | The board is still on the **stock VIA firmware** | Re-flash `smart_kb16_mk25047_openrgb.bin` (see [Download & flash](#download--flash)). |
+| `Detection failed - … is using version protocol 168` (or another odd number) | A hiccup right after the keyboard (re)connects | Just press **Rescan Devices** again. |
+
+Also close VIA / usevia.app, the YUNZII software and SignalRGB — anything that grabs the raw-HID channel.
 
 ---
 
